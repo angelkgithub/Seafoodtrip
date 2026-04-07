@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/HomePage.css'
 
 function HomePage({ onNavigate }) {
   const [seafoodMeals, setSeafoodMeals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { toggleFavorite, isFavorite } = useContext(FavoritesContext)
 
   useEffect(() => {
     const fetchSeafoodMeals = async () => {
@@ -56,7 +58,21 @@ function HomePage({ onNavigate }) {
             {seafoodMeals.map((meal) => (
               <div key={meal.idMeal} className="meal-card">
                 <img src={meal.strMealThumb} alt={meal.strMeal} />
-                <h3>{meal.strMeal}</h3>
+                <div className="meal-card-content">
+                  <div className="meal-header-row">
+                    <h3>{meal.strMeal}</h3>
+                    <button
+                      className={`heart-button ${isFavorite(meal.idMeal) ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleFavorite(meal)
+                      }}
+                      title={isFavorite(meal.idMeal) ? 'Remove from favorites' : 'Add to favorites'}
+                    >
+                      {isFavorite(meal.idMeal) ? '❤️' : '🤍'}
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -75,9 +91,9 @@ function HomePage({ onNavigate }) {
       </section>
 
       <section className="about">
-        <h2>Welcome to Sur's Seafood House</h2>
+        <h2>Welcome to Sur's SEA-kret Recipe</h2>
         <p>
-          At Sur's Seafood House, we believe in celebrating the ocean's bounty with 
+          At Sur's SEA-kret Recipe, we believe in celebrating the ocean's bounty with 
           dishes that honor culinary traditions from every corner of the globe. From 
           Mediterranean classics to Asian fusion, each plate is a journey of flavors.
         </p>

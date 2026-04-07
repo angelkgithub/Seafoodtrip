@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/MenuPage.css'
 
 function MenuPage({ onBack }) {
   const [meals, setMeals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { toggleFavorite, isFavorite } = useContext(FavoritesContext)
 
   useEffect(() => {
     const fetchSeafoodMeals = async () => {
@@ -43,8 +45,19 @@ function MenuPage({ onBack }) {
               <div key={meal.idMeal} className="menu-item">
                 <img src={meal.strMealThumb} alt={meal.strMeal} className="meal-image" />
                 <div className="item-content">
-                  <h3>{meal.strMeal}</h3>
-                  <p className="item-description">Fresh seafood masterpiece from our kitchen</p>
+                  <div className="item-header-row">
+                    <h3>{meal.strMeal}</h3>
+                    <button
+                      className={`heart-button ${isFavorite(meal.idMeal) ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleFavorite(meal)
+                      }}
+                      title={isFavorite(meal.idMeal) ? 'Remove from favorites' : 'Add to favorites'}
+                    >
+                      {isFavorite(meal.idMeal) ? '❤️' : '🤍'}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

@@ -6,6 +6,7 @@ import FavoritesPage from './pages/FavoritesPage'
 import CategoriesPage from './pages/CategoriesPage'
 import GlobalCuisinePage from './pages/GlobalCuisinePage'
 import Navigation from './components/Navigation'
+import { FavoritesProvider } from './context/FavoritesContext'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
@@ -49,10 +50,10 @@ function App() {
   }
 
   return (
-    <>
+    <FavoritesProvider>
       <Navigation onNavigate={handleNavigate} isDarkMode={isDarkMode} onThemeToggle={handleThemeToggle} />
       {renderPage()}
-    </>
+    </FavoritesProvider>
   )
 }
 

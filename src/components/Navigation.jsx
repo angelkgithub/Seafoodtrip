@@ -45,6 +45,14 @@ function Navigation({ onNavigate, isDarkMode, onThemeToggle }) {
             {isDropdownOpen && (
               <div className="dropdown-menu">
                 <div className="dropdown-section">
+                  <h3 className="section-title" onClick={() => handleSectionClick('menu')}>
+                    Explore Our Menu
+                  </h3>
+                </div>
+
+                <div className="dropdown-divider"></div>
+
+                <div className="dropdown-section">
                   <h3 className="section-title" onClick={() => handleSectionClick('ingredients')}>
                     Ingredients
                   </h3>
