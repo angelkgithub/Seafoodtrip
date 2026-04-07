@@ -1,0 +1,252 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--navbar-bg);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px var(--card-shadow);
+  z-index: 100;
+  padding: 0 20px;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.nav-logo h1 {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin: 0;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Search Bar Styles */
+.search-container {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 2px solid var(--primary-color);
+  border-radius: 25px;
+  padding: 8px 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.search-container:focus-within {
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+  border-color: #ff8555;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 8px 10px;
+  width: 200px;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.search-button:hover {
+  color: #ff8555;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-button {
+  background: #ff6b35;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.dropdown-button:hover {
+  background: #ff8555;
+  box-shadow: 0 6px 18px rgba(255, 107, 53, 0.4);
+  transform: translateY(-2px);
+}
+
+.dropdown-button:active {
+  transform: translateY(0);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px var(--card-shadow);
+  min-width: 320px;
+  margin-top: 12px;
+  padding: 15px 0;
+  animation: slideDown 0.3s ease;
+  z-index: 101;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-section {
+  padding: 12px 20px;
+}
+
+.section-title {
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 12px 8px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.section-title:hover {
+  color: #ff8555;
+  padding-left: 15px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0;
+}
+
+.theme-section {
+  padding: 12px 20px;
+}
+
+.theme-toggle {
+  width: 100%;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8555 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.theme-toggle:hover {
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+  transform: translateY(-2px);
+}
+
+.theme-toggle:active {
+  transform: translateY(0);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 0;
+    gap: 15px;
+  }
+
+  .nav-logo h1 {
+    font-size: 1.2rem;
+  }
+
+  .search-input {
+    width: 150px;
+    font-size: 0.9rem;
+  }
+
+  .search-container {
+    padding: 6px 12px;
+  }
+
+  .dropdown-menu {
+    min-width: 280px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+
+  .dropdown-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-logo h1 {
+    font-size: 1rem;
+  }
+
+  .search-input {
+    width: 120px;
+    font-size: 0.85rem;
+  }
+
+  .search-container {
+    padding: 5px 10px;
+  }
+
+  .dropdown-menu {
+    min-width: 260px;
+  }
+
+  .dropdown-section {
+    padding: 10px 15px;
+  }
+
+  .section-title {
+    font-size: 0.75rem;
+  }
+}

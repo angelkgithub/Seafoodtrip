@@ -1,0 +1,277 @@
+.global-cuisine-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 100px 20px 50px;
+  background: var(--feature-bg);
+}
+
+.cuisine-header {
+  max-width: 1200px;
+  margin: 0 auto 50px;
+  text-align: center;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.back-button:hover {
+  background: #ff8555;
+  box-shadow: 0 6px 18px rgba(255, 107, 53, 0.4);
+  transform: translateY(-2px);
+}
+
+.cuisine-header h1 {
+  font-size: 3.5rem;
+  color: var(--text-color);
+  margin: 20px 0 15px;
+  font-weight: bold;
+}
+
+.cuisine-header .subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.cuisine-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.loading,
+.error {
+  font-size: 1.1rem;
+  padding: 40px;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.loading {
+  color: var(--primary-color);
+  background: var(--card-bg);
+}
+
+.error {
+  color: #d32f2f;
+  background: var(--card-bg);
+}
+
+.countries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.country-card {
+  background: var(--card-bg);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  transition: all 0.3s ease;
+  border-top: 5px solid var(--primary-color);
+}
+
+.country-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px var(--card-shadow);
+}
+
+.country-header {
+  padding: 0;
+  text-align: center;
+  position: relative;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.country-flag-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.country-card:hover .country-flag-img {
+  transform: scale(1.1);
+}
+
+.country-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.country-card:hover .country-header::before {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.country-name {
+  position: absolute;
+  z-index: 2;
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.country-card:hover .country-name {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.country-overlay {
+  display: none;
+}
+
+.dishes-list {
+  padding: 25px;
+}
+
+.dish-item {
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.dish-item:last-child {
+  margin-bottom: 0;
+}
+
+.dish-item:hover {
+  transform: scale(1.05);
+}
+
+.dish-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.dish-name {
+  font-size: 0.95rem;
+  color: var(--text-color);
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.no-dishes {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .global-cuisine-page {
+    padding: 90px 15px 40px;
+  }
+
+  .back-button {
+    position: static;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
+  .cuisine-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .cuisine-header .subtitle {
+    font-size: 1rem;
+  }
+
+  .countries-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .country-header {
+    padding: 0;
+    height: 180px;
+  }
+
+  .country-name {
+    font-size: 1.5rem;
+  }
+
+  .dish-image {
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .global-cuisine-page {
+    padding: 85px 10px 30px;
+  }
+
+  .cuisine-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .cuisine-header .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .country-header {
+    height: 150px;
+  }
+
+  .country-name {
+    font-size: 1.3rem;
+  }
+
+  .country-name {
+    font-size: 1.2rem;
+  }
+
+  .dishes-list {
+    padding: 15px;
+  }
+
+  .dish-image {
+    height: 120px;
+  }
+
+  .dish-name {
+    font-size: 0.85rem;
+  }
+}
