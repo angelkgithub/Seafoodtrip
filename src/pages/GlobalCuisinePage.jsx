@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import '../styles/GlobalCuisine.css'
 
-function GlobalCuisinePage({ onBack }) {
+function GlobalCuisinePage({ onBack, searchQuery }) {
   const [mealsData, setMealsData] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const countries = [
     { name: 'Japan', countryCode: 'jp', area: 'Japanese' },
@@ -18,6 +19,28 @@ function GlobalCuisinePage({ onBack }) {
     { name: 'Mexico', countryCode: 'mx', area: 'Mexican' },
     { name: 'Portugal', countryCode: 'pt', area: 'Portuguese' },
   ]
+
+  const filteredCountries = countries.filter((country) => {
+    const matchesCountry = country.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesDish = mealsData[country.name]?.some((meal) =>
+      meal.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    return matchesCountry || matchesDish
+  })
+
+  const itemsPerPage = 6
+  const totalPages = Math.ceil(filteredCountries.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentCountries = filteredCountries.slice(startIndex, endIndex)
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentPage])
 
   useEffect(() => {
     const fetchMealsByArea = async () => {
@@ -60,32 +83,103 @@ function GlobalCuisinePage({ onBack }) {
         {loading && <p className="loading">Loading global cuisines...</p>}
         {error && <p className="error">{error}</p>}
         {!loading && (
-          <div className="countries-grid">
-            {countries.map((country) => (
-              <div key={country.name} className="country-card">
-                <div className="country-header">
-                  <img 
-                    src={`https://flagcdn.com/w320/${country.countryCode}.png`} 
-                    alt={country.name} 
-                    className="country-flag-img" 
-                  />
-                  <h2 className="country-name">{country.name}</h2>
+          <>
+            {filteredCountries.length === 0 ? (
+              <p className="error">No cuisines or dishes found.</p>
+            ) : (
+              <>
+              {totalPages > 1 && (
+                <div className="pagination">
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="page-btn"
+                  >
+                    Previous
+                  </button>
+
+                  <div className="page-numbers">
+                    {(() => {
+                      const maxVisible = 5
+                      let start = Math.max(currentPage - Math.floor(maxVisible / 2), 1)
+                      let end = start + maxVisible - 1
+
+                      if (end > totalPages) {
+                        end = totalPages
+                        start = Math.max(end - maxVisible + 1, 1)
+                      }
+
+                      return Array.from({ length: end - start + 1 }, (_, i) => start + i).map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`page-number ${currentPage === page ? 'active' : ''}`}
+                        >
+                          {page}
+                        </button>
+                      ))
+                    })()}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="page-btn"
+                  >
+                    Next
+                  </button>
                 </div>
-                <div className="dishes-list">
-                  {mealsData[country.name] && mealsData[country.name].length > 0 ? (
-                    mealsData[country.name].map((meal) => (
-                      <div key={meal.idMeal} className="dish-item">
-                        <img src={meal.strMealThumb} alt={meal.strMeal} className="dish-image" />
-                        <p className="dish-name">{meal.strMeal}</p>
+              )}
+
+                <div className="countries-grid">
+                  {currentCountries.map((country) => (
+                    <div key={country.name} className="country-card">
+                      <div className="country-header">
+                        <img
+                          src={`https://flagcdn.com/w320/${country.countryCode}.png`}
+                          alt={country.name}
+                          className="country-flag-img"
+                        />
+                        <h2 className="country-name">{country.name}</h2>
                       </div>
-                    ))
-                  ) : (
-                    <p className="no-dishes">No dishes available</p>
-                  )}
+                      <div className="dishes-list">
+                        {mealsData[country.name] && mealsData[country.name].length > 0 ? (
+                          mealsData[country.name].map((meal) => (
+                            <div key={meal.idMeal} className="dish-item">
+                              <img src={meal.strMealThumb} alt={meal.strMeal} className="dish-image" />
+                              <p className="dish-name">{meal.strMeal}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="no-dishes">No dishes available</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
+
+                {totalPages > 1 && (
+                  <div className="pagination-arrows">
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="arrow-btn"
+                    >
+                      ←
+                    </button>
+
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="arrow-btn"
+                    >
+                      →
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </>
         )}
       </div>
     </div>

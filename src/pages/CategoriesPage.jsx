@@ -3,13 +3,37 @@ import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/ItemPage.css'
 import '../styles/MenuPage.css'
 
-function CategoriesPage({ onBack }) {
+function CategoriesPage({ onBack, searchQuery }) {
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [meals, setMeals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
   const { toggleFavorite, isFavorite } = useContext(FavoritesContext)
+  const filteredCategories = categories.filter((category) =>
+    category.strCategory.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  const filteredMeals = meals.filter((meal) =>
+    meal.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  const itemsPerPage = 9
+
+  const activeItems = selectedCategory ? filteredMeals : filteredCategories
+  const totalPages = Math.ceil(activeItems.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+
+  const currentCategories = filteredCategories.slice(startIndex, endIndex)
+  const currentMeals = filteredMeals.slice(startIndex, endIndex)
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery, selectedCategory])
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentPage])
 
   // Fetch categories on mount
   useEffect(() => {
@@ -66,11 +90,60 @@ function CategoriesPage({ onBack }) {
           <h1>Categories</h1>
           <p className="subtitle">Click a category to explore recipes</p>
         </div>
+        
+        {!loading && filteredCategories.length > 0 && totalPages > 1 && (
+          <div className="pagination">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="page-btn"
+            >
+              Previous
+            </button>
 
+            <div className="page-numbers">
+              {(() => {
+                const maxVisible = 5
+                let start = Math.max(currentPage - Math.floor(maxVisible / 2), 1)
+                let end = start + maxVisible - 1
+
+                if (end > totalPages) {
+                  end = totalPages
+                  start = Math.max(end - maxVisible + 1, 1)
+                }
+
+                return Array.from({ length: end - start + 1 }, (_, i) => start + i).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`page-number ${currentPage === page ? 'active' : ''}`}
+                  >
+                    {page}
+                  </button>
+                ))
+              })()}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="page-btn"
+            >
+              Next
+            </button>
+          </div>
+        )}
         <div className="items-grid">
           {loading && <p className="loading">Loading categories...</p>}
           {error && <p className="error">{error}</p>}
-          {!loading && categories.length > 0 && categories.map((category) => (
+
+          {!loading && filteredCategories.length === 0 && (
+            <div className="categories-empty-state">
+              <p className="error">No categories found.</p>
+            </div>
+          )}
+
+          {!loading && filteredCategories.length > 0 && currentCategories.map((category) => (
             <div
               key={category.idCategory}
               className="item-card category-card"
@@ -83,6 +156,26 @@ function CategoriesPage({ onBack }) {
             </div>
           ))}
         </div>
+
+        {!loading && filteredCategories.length > 0 && totalPages > 1 && (
+          <div className="pagination-arrows">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="arrow-btn"
+            >
+              ←
+            </button>
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="arrow-btn"
+            >
+              →
+            </button>
+          </div>
+        )}
       </div>
     )
   }
@@ -99,9 +192,56 @@ function CategoriesPage({ onBack }) {
       <div className="menu-container">
         {loading && <p className="loading">Loading recipes...</p>}
         {error && <p className="error">{error}</p>}
-        {!loading && meals.length > 0 && (
+
+        {!loading && filteredMeals.length === 0 && (
+          <p className="error">No recipes found in this category.</p>
+        )}
+        
+        {!loading && filteredMeals.length > 0 && totalPages > 1 && (
+          <div className="pagination">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="page-btn"
+            >
+              Previous
+            </button>
+
+            <div className="page-numbers">
+              {(() => {
+                const maxVisible = 5
+                let start = Math.max(currentPage - Math.floor(maxVisible / 2), 1)
+                let end = start + maxVisible - 1
+
+                if (end > totalPages) {
+                  end = totalPages
+                  start = Math.max(end - maxVisible + 1, 1)
+                }
+
+                return Array.from({ length: end - start + 1 }, (_, i) => start + i).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`page-number ${currentPage === page ? 'active' : ''}`}
+                  >
+                    {page}
+                  </button>
+                ))
+              })()}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="page-btn"
+            >
+              Next
+            </button>
+          </div>
+        )}
+        {!loading && filteredMeals.length > 0 && (
           <div className="menu-items">
-            {meals.map((meal) => (
+            {currentMeals.map((meal) => (
               <div key={meal.idMeal} className="menu-item">
                 <img src={meal.strMealThumb} alt={meal.strMeal} className="meal-image" />
                 <div className="item-content">
@@ -121,6 +261,26 @@ function CategoriesPage({ onBack }) {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {!loading && filteredMeals.length > 0 && totalPages > 1 && (
+          <div className="pagination-arrows">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="arrow-btn"
+            >
+              ←
+            </button>
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="arrow-btn"
+            >
+              →
+            </button>
           </div>
         )}
       </div>

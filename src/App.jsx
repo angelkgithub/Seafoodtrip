@@ -11,6 +11,7 @@ import { FavoritesProvider } from './context/FavoritesContext'
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     const root = document.documentElement
@@ -25,6 +26,7 @@ function App() {
 
   const handleNavigate = (page) => {
     setCurrentPage(page)
+    setSearchQuery('')
     window.scrollTo(0, 0)
   }
 
@@ -35,15 +37,15 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'menu':
-        return <MenuPage onBack={() => handleNavigate('home')} />
+        return <MenuPage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
       case 'ingredients':
         return <IngredientsPage onBack={() => handleNavigate('home')} />
       case 'favorites':
-        return <FavoritesPage onBack={() => handleNavigate('home')} />
+        return <FavoritesPage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
       case 'categories':
-        return <CategoriesPage onBack={() => handleNavigate('home')} />
+        return <CategoriesPage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
       case 'global-cuisine':
-        return <GlobalCuisinePage onBack={() => handleNavigate('home')} />
+        return <GlobalCuisinePage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
       default:
         return <HomePage onNavigate={handleNavigate} />
     }
@@ -51,7 +53,13 @@ function App() {
 
   return (
     <FavoritesProvider>
-      <Navigation onNavigate={handleNavigate} isDarkMode={isDarkMode} onThemeToggle={handleThemeToggle} />
+      <Navigation 
+      onNavigate={handleNavigate} 
+      isDarkMode={isDarkMode} 
+      onThemeToggle={handleThemeToggle}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery} 
+      />
       {renderPage()}
     </FavoritesProvider>
   )

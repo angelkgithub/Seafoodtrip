@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import '../styles/Navigation.css'
 
-function Navigation({ onNavigate, isDarkMode, onThemeToggle }) {
+function Navigation({ onNavigate, isDarkMode, onThemeToggle, searchQuery, setSearchQuery }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen)
