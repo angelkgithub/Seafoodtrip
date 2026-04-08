@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/GlobalCuisine.css'
 
-function GlobalCuisinePage({ onBack, searchQuery }) {
+function GlobalCuisinePage({ onNavigate, onBack, searchQuery }) {
   const [mealsData, setMealsData] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const { toggleFavorite, isFavorite } = useContext(FavoritesContext)
 
   const countries = [
     { name: 'Japan', countryCode: 'jp', area: 'Japanese' },
@@ -145,9 +147,25 @@ function GlobalCuisinePage({ onBack, searchQuery }) {
                       <div className="dishes-list">
                         {mealsData[country.name] && mealsData[country.name].length > 0 ? (
                           mealsData[country.name].map((meal) => (
-                            <div key={meal.idMeal} className="dish-item">
+                            <div 
+                              key={meal.idMeal} 
+                              className="dish-item"
+                              onClick={() => onNavigate('meal-detail', meal.idMeal)}
+                              style={{ cursor: 'pointer' }}
+                            >
                               <img src={meal.strMealThumb} alt={meal.strMeal} className="dish-image" />
                               <p className="dish-name">{meal.strMeal}</p>
+                              <button
+                                className={`heart-button ${isFavorite(meal.idMeal) ? 'active' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  toggleFavorite(meal)
+                                }}
+                                title={isFavorite(meal.idMeal) ? 'Remove from favorites' : 'Add to favorites'}
+                                style={{ position: 'absolute', top: '10px', right: '10px' }}
+                              >
+                                {isFavorite(meal.idMeal) ? '❤️' : '🤍'}
+                              </button>
                             </div>
                           ))
                         ) : (

@@ -15,7 +15,7 @@ function HomePage({ onNavigate }) {
         const response = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood')
         const data = await response.json()
         if (data.meals) {
-          setSeafoodMeals(data.meals.slice(0, 6)) // Get first 6 meals
+          setSeafoodMeals(data.meals.slice(0, 6))
         }
         setLoading(false)
       } catch (err) {
@@ -44,7 +44,7 @@ function HomePage({ onNavigate }) {
               Discover the finest seafood dishes from around the world, 
               expertly prepared with fresh ingredients and authentic flavors
             </p>
-            <button className="cta-button" onClick={() => onNavigate && onNavigate('menu')}>Explore Our Menu</button>
+            <button className="cta-button" onClick={() => onNavigate('menu')}>Explore Our Menu</button>
           </div>
         </div>
       </div>
@@ -56,7 +56,12 @@ function HomePage({ onNavigate }) {
         {!loading && (
           <div className="meals-grid">
             {seafoodMeals.map((meal) => (
-              <div key={meal.idMeal} className="meal-card">
+              <div 
+                key={meal.idMeal} 
+                className="meal-card"
+                onClick={() => onNavigate('meal-detail', meal.idMeal)}
+                style={{ cursor: 'pointer' }}
+              >
                 <img src={meal.strMealThumb} alt={meal.strMeal} />
                 <div className="meal-card-content">
                   <div className="meal-header-row">
@@ -80,7 +85,7 @@ function HomePage({ onNavigate }) {
       </section>
 
       <section className="features">
-        <div className="feature-card" onClick={() => onNavigate && onNavigate('global-cuisine')} style={{ cursor: 'pointer' }}>
+        <div className="feature-card" onClick={() => onNavigate('global-cuisine')} style={{ cursor: 'pointer' }}>
           <h3>🌍 Global Cuisine</h3>
           <p>Experience seafood dishes inspired by culinary traditions from around the world</p>
         </div>

@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/ItemPage.css'
 
-function FavoritesPage({ onBack, searchQuery }) {
+function FavoritesPage({ onNavigate, onBack, searchQuery }) {
   const { favorites, toggleFavorite } = useContext(FavoritesContext)
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -104,12 +104,20 @@ function FavoritesPage({ onBack, searchQuery }) {
           </div>
         ) : (
           currentFavorites.map((meal) => (
-            <div key={meal.idMeal} className="item-card favorites-card">
+            <div 
+              key={meal.idMeal} 
+              className="item-card favorites-card"
+              onClick={() => onNavigate('meal-detail', meal.idMeal)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="favorite-image-container">
                 <img src={meal.strMealThumb} alt={meal.strMeal} className="meal-image" />
                 <button
                   className="remove-favorite-btn"
-                  onClick={() => toggleFavorite(meal)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleFavorite(meal)
+                  }}
                   title="Remove from favorites"
                 >
                   ✕

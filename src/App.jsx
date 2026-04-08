@@ -5,13 +5,16 @@ import IngredientsPage from './pages/IngredientsPage'
 import FavoritesPage from './pages/FavoritesPage'
 import CategoriesPage from './pages/CategoriesPage'
 import GlobalCuisinePage from './pages/GlobalCuisinePage'
+import MealDetailPage from './pages/MealDetailPage'
 import Navigation from './components/Navigation'
 import { FavoritesProvider } from './context/FavoritesContext'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
+  const [previousPage, setPreviousPage] = useState('home')
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedMealId, setSelectedMealId] = useState(null)
 
   useEffect(() => {
     const root = document.documentElement
@@ -24,8 +27,28 @@ function App() {
     }
   }, [isDarkMode])
 
-  const handleNavigate = (page) => {
+  const handleNavigate = (page, mealId = null) => {
+    // Always update previous page when navigating
+    if (currentPage !== 'meal-detail') {
+      setPreviousPage(currentPage)
+    }
+    
     setCurrentPage(page)
+    if (mealId) {
+      setSelectedMealId(mealId)
+    }
+    setSearchQuery('')
+    window.scrollTo(0, 0)
+  }
+
+  const handleBackNavigation = () => {
+    setCurrentPage(previousPage)
+    setSearchQuery('')
+    window.scrollTo(0, 0)
+  }
+
+  const handleBackFromMenuOrGlobal = () => {
+    setCurrentPage('home')
     setSearchQuery('')
     window.scrollTo(0, 0)
   }
@@ -34,31 +57,34 @@ function App() {
     setIsDarkMode(!isDarkMode)
   }
 
+  const pageProps = {
+    onNavigate: handleNavigate,
+    onBack: handleBackNavigation,
+    searchQuery: searchQuery
+  }
+
   const renderPage = () => {
-    switch (currentPage) {
-      case 'menu':
-        return <MenuPage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
-      case 'ingredients':
-        return <IngredientsPage onBack={() => handleNavigate('home')} />
-      case 'favorites':
-        return <FavoritesPage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
-      case 'categories':
-        return <CategoriesPage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
-      case 'global-cuisine':
-        return <GlobalCuisinePage onBack={() => handleNavigate('home')} searchQuery={searchQuery} />
-      default:
-        return <HomePage onNavigate={handleNavigate} />
+    const pages = {
+      home: <HomePage {...pageProps} />,
+      menu: <MenuPage onNavigate={handleNavigate} onBack={handleBackFromMenuOrGlobal} searchQuery={searchQuery} />,
+      ingredients: <IngredientsPage {...pageProps} />,
+      favorites: <FavoritesPage {...pageProps} />,
+      categories: <CategoriesPage {...pageProps} />,
+      'global-cuisine': <GlobalCuisinePage onNavigate={handleNavigate} onBack={handleBackFromMenuOrGlobal} searchQuery={searchQuery} />,
+      'meal-detail': <MealDetailPage mealId={selectedMealId} onBack={handleBackNavigation} />
     }
+    
+    return pages[currentPage] || pages.home
   }
 
   return (
     <FavoritesProvider>
       <Navigation 
-      onNavigate={handleNavigate} 
-      isDarkMode={isDarkMode} 
-      onThemeToggle={handleThemeToggle}
-      searchQuery={searchQuery}
-      setSearchQuery={setSearchQuery} 
+        onNavigate={handleNavigate} 
+        isDarkMode={isDarkMode} 
+        onThemeToggle={handleThemeToggle}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery} 
       />
       {renderPage()}
     </FavoritesProvider>

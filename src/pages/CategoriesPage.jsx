@@ -3,7 +3,7 @@ import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/ItemPage.css'
 import '../styles/MenuPage.css'
 
-function CategoriesPage({ onBack, searchQuery }) {
+function CategoriesPage({ onNavigate, onBack, searchQuery }) {
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [meals, setMeals] = useState([])
@@ -11,19 +11,20 @@ function CategoriesPage({ onBack, searchQuery }) {
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const { toggleFavorite, isFavorite } = useContext(FavoritesContext)
+  
   const filteredCategories = categories.filter((category) =>
     category.strCategory.toLowerCase().includes(searchQuery.toLowerCase())
   )
+  
   const filteredMeals = meals.filter((meal) =>
     meal.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
   )
+  
   const itemsPerPage = 9
-
   const activeItems = selectedCategory ? filteredMeals : filteredCategories
   const totalPages = Math.ceil(activeItems.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-
   const currentCategories = filteredCategories.slice(startIndex, endIndex)
   const currentMeals = filteredMeals.slice(startIndex, endIndex)
 
@@ -35,7 +36,6 @@ function CategoriesPage({ onBack, searchQuery }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [currentPage])
 
-  // Fetch categories on mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -56,7 +56,6 @@ function CategoriesPage({ onBack, searchQuery }) {
     fetchCategories()
   }, [])
 
-  // Fetch meals when category is selected
   useEffect(() => {
     if (!selectedCategory) return
 
@@ -81,7 +80,6 @@ function CategoriesPage({ onBack, searchQuery }) {
     fetchMealsByCategory()
   }, [selectedCategory])
 
-  // Show categories list
   if (!selectedCategory) {
     return (
       <div className="item-page">
@@ -133,6 +131,7 @@ function CategoriesPage({ onBack, searchQuery }) {
             </button>
           </div>
         )}
+        
         <div className="items-grid">
           {loading && <p className="loading">Loading categories...</p>}
           {error && <p className="error">{error}</p>}
@@ -180,7 +179,6 @@ function CategoriesPage({ onBack, searchQuery }) {
     )
   }
 
-  // Show meals for selected category
   return (
     <div className="menu-page">
       <div className="menu-header">
@@ -239,10 +237,16 @@ function CategoriesPage({ onBack, searchQuery }) {
             </button>
           </div>
         )}
+        
         {!loading && filteredMeals.length > 0 && (
           <div className="menu-items">
             {currentMeals.map((meal) => (
-              <div key={meal.idMeal} className="menu-item">
+              <div 
+                key={meal.idMeal} 
+                className="menu-item"
+                onClick={() => onNavigate('meal-detail', meal.idMeal)}
+                style={{ cursor: 'pointer' }}
+              >
                 <img src={meal.strMealThumb} alt={meal.strMeal} className="meal-image" />
                 <div className="item-content">
                   <div className="item-header-row">

@@ -1,0 +1,681 @@
+/* MEAL DETAIL PAGE - ALL STYLES SCOPED TO .meal-detail */
+
+.meal-detail {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--feature-bg);
+  position: relative;
+}
+
+/* Back Button */
+.meal-detail .back-button {
+  position: fixed;
+  top: 100px;
+  left: 30px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  z-index: 100;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.meal-detail .back-button:hover {
+  background: #ff8555;
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .meal-detail .back-button {
+    position: static;
+    margin: 20px 20px 30px 20px;
+    width: auto;
+    display: inline-block;
+  }
+}
+
+/* Hero Section - Image and Title Side by Side */
+.meal-detail .detail-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 80px auto 0;
+  padding: 60px 40px;
+  overflow: visible;
+  background: transparent;
+}
+
+.meal-detail .hero-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  background: var(--card-bg);
+  border-radius: 15px;
+  height: 450px;
+  box-shadow: 0 8px 30px var(--card-shadow);
+}
+
+.meal-detail .hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: mealDetailZoomIn 0.6s ease-out;
+  border-radius: 15px;
+}
+
+@keyframes mealDetailZoomIn {
+  from {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.meal-detail .hero-overlay {
+  display: none;
+}
+
+.meal-detail .hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+.meal-detail .meal-title {
+  font-size: 3rem;
+  font-weight: bold;
+  font-style: italic;
+  color: var(--text-color);
+  margin: 0 0 25px 0;
+  line-height: 1.2;
+  animation: mealDetailSlideInUp 0.6s ease-out 0.2s backwards;
+}
+
+@keyframes mealDetailSlideInUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.meal-detail .meal-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+  animation: mealDetailSlideInUp 0.6s ease-out 0.35s backwards;
+}
+
+.meal-detail .meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary-color), #ff8555);
+  color: white;
+  padding: 10px 30px;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  width: fit-content;
+}
+
+.meal-detail .badge-icon {
+  font-size: 1.2rem;
+}
+
+.meal-detail .favorite-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--primary-color), #ff8555);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+  width: fit-content;
+  animation: mealDetailSlideInUp 0.6s ease-out 0.5s backwards;
+}
+
+.meal-detail .favorite-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.6);
+}
+
+.meal-detail .favorite-btn.active {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.meal-detail .favorite-icon {
+  font-size: 1.4rem;
+}
+
+.meal-detail .favorite-text {
+  letter-spacing: 0.5px;
+}
+
+/* Print Button - Same design as favorite button */
+.meal-detail .print-btn {
+  background: linear-gradient(135deg, var(--primary-color), #ff8555);
+  animation: mealDetailSlideInUp 0.6s ease-out 0.5s backwards;
+}
+
+.meal-detail .print-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.6);
+}
+
+.meal-detail .print-btn.active {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+/* Button Group */
+.meal-detail .button-group {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.meal-detail .loader {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 107, 53, 0.2);
+  border-top: 5px solid var(--primary-color);
+  border-radius: 50%;
+  animation: mealDetailSpin 1s linear infinite;
+  margin: 100px auto 20px;
+}
+
+@keyframes mealDetailSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.meal-detail .loading,
+.meal-detail .error {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 20px;
+  color: var(--text-secondary);
+}
+
+.meal-detail .error {
+  color: #e74c3c;
+}
+
+/* Main Container */
+.meal-detail .detail-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  max-width: 1300px;
+  margin: 50px auto;
+  padding: 0 30px;
+}
+
+.meal-detail .detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Sections */
+.meal-detail .instructions-section,
+.meal-detail .ingredients-section {
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px var(--card-shadow);
+  animation: mealDetailFadeInUp 0.6s ease-out;
+}
+
+@keyframes mealDetailFadeInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.meal-detail .instructions-section h2,
+.meal-detail .ingredients-section h2 {
+  font-size: 1.8rem;
+  color: var(--text-color);
+  margin: 0 0 25px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  padding-bottom: 15px;
+  border-bottom: 3px solid var(--primary-color);
+}
+
+.meal-detail .section-icon {
+  font-size: 2rem;
+}
+
+.meal-detail .instructions-text {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--text-color);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+/* Ingredients List */
+.meal-detail .ingredients-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meal-detail .ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--feature-bg);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.meal-detail .ingredient-item:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 107, 53, 0.05));
+  transform: translateX(8px);
+  box-shadow: 0 4px 12px var(--card-shadow);
+}
+
+/* Dark Mode - Ingredient item hover */
+:root.dark-mode .meal-detail .ingredient-item:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.08));
+}
+
+.meal-detail .ingredient-left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+}
+
+.meal-detail .ingredient-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  accent-color: var(--primary-color);
+}
+
+.meal-detail .ingredient-checkbox:hover {
+  accent-color: #ff8555;
+}
+
+.meal-detail .ingredient-left label {
+  cursor: pointer;
+  flex: 1;
+}
+
+.meal-detail .ingredient-name {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.meal-detail .ingredient-measure {
+  color: var(--primary-color);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: right;
+  min-width: 100px;
+}
+
+/* Sidebar */
+.meal-detail .detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  height: fit-content;
+  position: sticky;
+  top: 120px;
+}
+
+.meal-detail .sidebar-card {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px var(--card-shadow);
+  animation: mealDetailFadeInUp 0.6s ease-out;
+}
+
+/* Dark Mode - Sidebar card border */
+:root.dark-mode .meal-detail .sidebar-card {
+  border: 1px solid rgba(255, 107, 53, 0.1);
+}
+
+.meal-detail .sidebar-card h3 {
+  font-size: 1.3rem;
+  color: var(--text-color);
+  margin: 0 0 20px 0;
+  font-weight: 700;
+}
+
+.meal-detail .info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.meal-detail .info-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.meal-detail .info-label {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meal-detail .info-value {
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 1.3rem;
+  font-style: italic;
+}
+
+.meal-detail .resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meal-detail .resource-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, var(--primary-color), #ff8555);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.meal-detail .resource-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+}
+
+.meal-detail .link-icon {
+  font-size: 1.2rem;
+}
+
+.meal-detail .tips p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.7;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Dark Mode Specific Styles */
+:root.dark-mode .meal-detail .instructions-section,
+:root.dark-mode .meal-detail .ingredients-section {
+  border: 1px solid rgba(255, 107, 53, 0.1);
+}
+
+:root.dark-mode .meal-detail .instructions-section h2,
+:root.dark-mode .meal-detail .ingredients-section h2 {
+  border-bottom-color: rgba(255, 107, 53, 0.5);
+}
+
+:root.dark-mode .meal-detail .ingredient-item {
+  border-left-color: rgba(255, 107, 53, 0.6);
+}
+
+:root.dark-mode .meal-detail .info-item {
+  border-bottom-color: rgba(255, 107, 53, 0.1);
+}
+
+:root.dark-mode .meal-detail .hero-image-wrapper {
+  border: 1px solid rgba(255, 107, 53, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .meal-detail .detail-hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin: 60px auto 0;
+    padding: 50px 30px;
+  }
+
+  .meal-detail .hero-image-wrapper {
+    height: 380px;
+  }
+
+  .meal-detail .meal-title {
+    font-size: 2.5rem;
+  }
+
+  .meal-detail .detail-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .meal-detail .detail-sidebar {
+    position: static;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .meal-detail .detail-hero {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin: 50px auto 0;
+    padding: 40px 20px;
+  }
+
+  .meal-detail .hero-image-wrapper {
+    height: 320px;
+  }
+
+  .meal-detail .meal-title {
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
+
+  .meal-detail .meal-meta {
+    gap: 10px;
+  }
+
+  .meal-detail .meta-badge {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .meal-detail .favorite-btn,
+  .meal-detail .print-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+
+  .meal-detail .button-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .meal-detail .favorite-btn,
+  .meal-detail .print-btn {
+    width: 100%;
+  }
+
+  .meal-detail .instructions-section,
+  .meal-detail .ingredients-section {
+    padding: 25px;
+  }
+
+  .meal-detail .instructions-section h2,
+  .meal-detail .ingredients-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .meal-detail .detail-container {
+    margin: 30px auto;
+  }
+
+  .meal-detail .sidebar-card {
+    padding: 20px;
+  }
+
+  .meal-detail .sidebar-card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .meal-detail .back-button {
+    position: static;
+    margin: 15px 15px 20px 15px;
+    width: auto;
+    display: inline-block;
+  }
+
+  .meal-detail .detail-hero {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    margin: 40px auto 0;
+    padding: 30px 15px;
+  }
+
+  .meal-detail .hero-image-wrapper {
+    height: 280px;
+  }
+
+  .meal-detail .meal-title {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+
+  .meal-detail .meal-meta {
+    gap: 8px;
+  }
+
+  .meal-detail .meta-badge {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .meal-detail .favorite-btn,
+  .meal-detail .print-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+
+  .meal-detail .button-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .meal-detail .detail-container {
+    padding: 0 15px;
+    margin: 20px auto;
+  }
+
+  .meal-detail .instructions-section,
+  .meal-detail .ingredients-section {
+    padding: 20px 15px;
+  }
+
+  .meal-detail .instructions-section h2,
+  .meal-detail .ingredients-section h2 {
+    font-size: 1.3rem;
+    gap: 8px;
+  }
+
+  .meal-detail .section-icon {
+    font-size: 1.5rem;
+  }
+
+  .meal-detail .instructions-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .meal-detail .ingredient-item {
+    padding: 12px 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .meal-detail .ingredient-measure {
+    width: 100%;
+    text-align: right;
+    min-width: auto;
+  }
+
+  .meal-detail .sidebar-card {
+    padding: 15px;
+  }
+
+  .meal-detail .sidebar-card h3 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  .meal-detail .info-item {
+    padding-bottom: 12px;
+  }
+
+  .meal-detail .resource-link {
+    padding: 12px 15px;
+    font-size: 0.95rem;
+  }
+
+  .meal-detail .tips p {
+    font-size: 0.9rem;
+  }
+}

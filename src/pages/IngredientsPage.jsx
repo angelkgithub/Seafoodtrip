@@ -2,17 +2,16 @@ import { useState, useEffect, useContext } from 'react'
 import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/IngredientsPage.css'
 
-function IngredientsPage({ onBack }) {
+function IngredientsPage({ onNavigate, onBack }) {
   const [availableIngredients, setAvailableIngredients] = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [recipes, setRecipes] = useState([])
   const [loadingIngredients, setLoadingIngredients] = useState(true)
   const [loadingRecipes, setLoadingRecipes] = useState(false)
-  const [matchMode, setMatchMode] = useState('any') // 'any' or 'all'
+  const [matchMode, setMatchMode] = useState('any')
   const { toggleFavorite, isFavorite } = useContext(FavoritesContext)
 
-  // Fetch all ingredients from API on mount
   useEffect(() => {
     const fetchAllIngredients = async () => {
       try {
@@ -32,7 +31,6 @@ function IngredientsPage({ onBack }) {
     fetchAllIngredients()
   }, [])
 
-  // Fetch recipes based on selected ingredients
   useEffect(() => {
     if (selectedIngredients.length === 0) {
       setRecipes([])
@@ -44,7 +42,6 @@ function IngredientsPage({ onBack }) {
         setLoadingRecipes(true)
         let allRecipes = []
 
-        // Fetch recipes for each selected ingredient
         for (const ingredient of selectedIngredients) {
           const response = await fetch(
             `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`
@@ -55,20 +52,11 @@ function IngredientsPage({ onBack }) {
           }
         }
 
-        // Remove duplicates based on idMeal
         const uniqueRecipes = Array.from(
           new Map(allRecipes.map(meal => [meal.idMeal, meal])).values()
         )
 
-        // Filter based on match mode
-        if (matchMode === 'all' && selectedIngredients.length > 1) {
-          // For 'all' mode, we'd need to check each recipe's ingredients
-          // For now, just return unique recipes (simplified)
-          setRecipes(uniqueRecipes)
-        } else {
-          setRecipes(uniqueRecipes)
-        }
-
+        setRecipes(uniqueRecipes)
         setLoadingRecipes(false)
       } catch (err) {
         console.error('Error fetching recipes:', err)
@@ -106,12 +94,9 @@ function IngredientsPage({ onBack }) {
       </div>
 
       <div className="ingredients-container">
-        {/* Two Column Layout */}
         <div className="ingredients-layout">
-          {/* Left Side - Available Ingredients */}
           <div className="ingredients-left">
             <div className="ingredients-section">
-              {/* Search Bar */}
               <div className="search-section-inside">
                 <input
                   type="text"
@@ -142,7 +127,6 @@ function IngredientsPage({ onBack }) {
             </div>
           </div>
 
-          {/* Right Side - Selected Ingredients */}
           <div className="ingredients-right">
             {selectedIngredients.length > 0 && (
               <div className="selected-ingredients-section">
@@ -164,7 +148,6 @@ function IngredientsPage({ onBack }) {
                   ))}
                 </div>
 
-                {/* Match Mode Toggle */}
                 <div className="match-mode-section">
                   <label>
                     <input
@@ -196,7 +179,6 @@ function IngredientsPage({ onBack }) {
           </div>
         </div>
 
-        {/* Recipes Results */}
         {selectedIngredients.length > 0 && (
           <div className="recipes-results-section">
             <h3>Matching Recipes ({recipes.length})</h3>
@@ -210,7 +192,12 @@ function IngredientsPage({ onBack }) {
             {!loadingRecipes && recipes.length > 0 && (
               <div className="recipes-grid">
                 {recipes.map((meal) => (
-                  <div key={meal.idMeal} className="recipe-card">
+                  <div 
+                    key={meal.idMeal} 
+                    className="recipe-card"
+                    onClick={() => onNavigate('meal-detail', meal.idMeal)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <div className="recipe-image-container">
                       <img src={meal.strMealThumb} alt={meal.strMeal} />
                     </div>

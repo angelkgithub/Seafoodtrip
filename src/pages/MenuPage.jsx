@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { FavoritesContext } from '../context/FavoritesContext'
 import '../styles/MenuPage.css'
 
-function MenuPage({ onBack, searchQuery }) {
+function MenuPage({ onNavigate, onBack, searchQuery }) {
   const [meals, setMeals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -39,15 +39,13 @@ function MenuPage({ onBack, searchQuery }) {
 
   const filteredMeals = meals.filter((meal) =>
     meal.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
-)
+  )
 
-const mealsPerPage = 6
-const totalPages = Math.ceil(filteredMeals.length / mealsPerPage)
-
-const startIndex = (currentPage - 1) * mealsPerPage
-const endIndex = startIndex + mealsPerPage
-
-const currentMeals = filteredMeals.slice(startIndex, endIndex)
+  const mealsPerPage = 6
+  const totalPages = Math.ceil(filteredMeals.length / mealsPerPage)
+  const startIndex = (currentPage - 1) * mealsPerPage
+  const endIndex = startIndex + mealsPerPage
+  const currentMeals = filteredMeals.slice(startIndex, endIndex)
 
   return (
     <div className="menu-page">
@@ -110,7 +108,12 @@ const currentMeals = filteredMeals.slice(startIndex, endIndex)
           )}
             <div className="menu-items">
               {currentMeals.map((meal) => (
-                <div key={meal.idMeal} className="menu-item">
+                <div 
+                  key={meal.idMeal} 
+                  className="menu-item"
+                  onClick={() => onNavigate('meal-detail', meal.idMeal)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <img src={meal.strMealThumb} alt={meal.strMeal} className="meal-image" />
                   <div className="item-content">
                     <div className="item-header-row">
