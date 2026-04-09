@@ -89,7 +89,7 @@ function HomePage({ onNavigate }) {
           <h3>🌍 Global Cuisine</h3>
           <p>Experience seafood dishes inspired by culinary traditions from around the world</p>
         </div>
-        <div className="feature-card">
+        <div className="feature-card" onClick={() => onNavigate('expert-chef')} style={{ cursor: 'pointer' }}>
           <h3>‍🍳 Expert Chefs</h3>
           <p>Our talented chefs bring years of experience and passion to every dish</p>
         </div>

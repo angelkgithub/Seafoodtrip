@@ -6,6 +6,7 @@ import FavoritesPage from './pages/FavoritesPage'
 import CategoriesPage from './pages/CategoriesPage'
 import GlobalCuisinePage from './pages/GlobalCuisinePage'
 import MealDetailPage from './pages/MealDetailPage'
+import ExpertChefPage from './pages/ExpertChefPage'
 import Navigation from './components/Navigation'
 import { FavoritesProvider } from './context/FavoritesContext'
 
@@ -71,6 +72,7 @@ function App() {
       favorites: <FavoritesPage {...pageProps} />,
       categories: <CategoriesPage {...pageProps} />,
       'global-cuisine': <GlobalCuisinePage onNavigate={handleNavigate} onBack={handleBackFromMenuOrGlobal} searchQuery={searchQuery} />,
+      'expert-chef': <ExpertChefPage onBack={handleBackFromMenuOrGlobal} />,
       'meal-detail': <MealDetailPage mealId={selectedMealId} onBack={handleBackNavigation} />
     }
     
