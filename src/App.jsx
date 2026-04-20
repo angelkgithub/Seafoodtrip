@@ -11,11 +11,24 @@ import Navigation from './components/Navigation'
 import { FavoritesProvider } from './context/FavoritesContext'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home')
+  // Initialize currentPage from URL path
+  const getInitialPage = () => {
+    const path = window.location.pathname.slice(1) || 'home'
+    const validPages = ['home', 'menu', 'ingredients', 'favorites', 'categories', 'global-cuisine', 'expert-chef', 'meal-detail']
+    return validPages.includes(path) ? path : 'home'
+  }
+
+  const [currentPage, setCurrentPage] = useState(getInitialPage)
   const [previousPage, setPreviousPage] = useState('home')
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMealId, setSelectedMealId] = useState(null)
+
+  // Update URL when page changes
+  useEffect(() => {
+    const path = currentPage === 'home' ? '/' : `/${currentPage}`
+    window.history.pushState(null, '', path)
+  }, [currentPage])
 
   useEffect(() => {
     const root = document.documentElement
